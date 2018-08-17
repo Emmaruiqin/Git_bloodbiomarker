@@ -29,8 +29,9 @@ def TTest_diff(data, control, case, ctrname, casename, normethd):
     dt_gr.loc[:, 'logFC_%s_%s'%(casename, ctrname)] = dt_gr.loc[:, casename+'_mean'] - dt_gr.loc[:, ctrname+'_mean']
     dt_gr.loc[:, 'FC_%s_%s'%(casename, ctrname)] = np.exp2(dt_gr.loc[:, 'logFC_%s_%s'%(casename, ctrname)])
 
-    for probe in dt_gr.index:
-        dt_gr.loc[probe, 'Pvalue_%s_%s'%(casename, ctrname)] = st.ttest_ind(dt_gr.loc[probe, case], dt_gr.loc[probe, control]).pvalue
+    # for probe in dt_gr.index:
+    #     dt_gr.loc[probe, 'Pvalue_%s_%s'%(casename, ctrname)] = st.ttest_ind(dt_gr.loc[probe, case], dt_gr.loc[probe, control]).pvalue
+    dt_gr.loc[:, 'Pvalue_%s_%s'%(casename, ctrname)] = st.ttest_ind(dt_gr.loc[:, case], dt_gr.loc[:, control], axis=1).pvalue
 
     dt_gr_p = dt_gr.loc[dt_gr['Pvalue_%s_%s'%(casename, ctrname)] <= 0.05]
     dt_gr_p_fc = dt_gr_p.loc[dt_gr_p['FC_%s_%s' % (casename, ctrname)] > 1.2].append(dt_gr_p.loc[dt_gr['FC_%s_%s' % (casename, ctrname)] < 0.8])
